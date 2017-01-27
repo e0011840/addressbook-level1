@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Scanner;
@@ -34,6 +35,30 @@ import java.util.Set;
  * This class is used to maintain a list of person data which are saved
  * in a text file.
  **/
+/**
+ * @author Difeng
+ *
+ */
+/**
+ * @author Difeng
+ *
+ */
+/**
+ * @author Difeng
+ *
+ */
+/**
+ * @author Difeng
+ *
+ */
+/**
+ * @author Difeng
+ *
+ */
+/**
+ * @author Difeng
+ *
+ */
 public class AddressBook {
 
     /**
@@ -132,6 +157,10 @@ public class AddressBook {
     private static final String COMMAND_EXIT_WORD = "exit";
     private static final String COMMAND_EXIT_DESC = "Exits the program.";
     private static final String COMMAND_EXIT_EXAMPLE = COMMAND_EXIT_WORD;
+    
+    private static final String COMMAND_SORT_WORD = "sort";
+    private static final String COMMAND_SORT_DESC = "Sort the list in alphabetical order";
+    private static final String COMMAND_SORT_EXAMPLE = COMMAND_SORT_WORD;
 
     private static final String DIVIDER = "===================================================";
 
@@ -383,11 +412,28 @@ public class AddressBook {
             return getUsageInfoForAllCommands();
         case COMMAND_EXIT_WORD:
             executeExitProgramRequest();
+        case COMMAND_SORT_WORD:
+        	return executeSortInAlphabeticOrder();
         default:
             return getMessageForInvalidCommandInput(commandType, getUsageInfoForAllCommands());
         }
     }
-
+    
+    /* Sort in Alphabetical Order
+     * 
+     * @return number of people found and shows a list of people in Alphabetical Order
+     */
+    private static String executeSortInAlphabeticOrder(){
+    	Comparator<String[]> sort = new Comparator<String[]>() {
+    		public int compare(String[] person1, String[] person2){
+    			return getNameFromPerson(person1).compareTo(getNameFromPerson(person2));
+    		}
+    	};
+    	Collections.sort(ALL_PERSONS, sort);
+    	showToUser(ALL_PERSONS);
+    	return getMessageForPersonsDisplayedSummary(ALL_PERSONS);
+    }
+    
     /**
      * Splits raw user input into command word and command arguments string
      *
@@ -1092,7 +1138,8 @@ public class AddressBook {
                 + getUsageInfoForDeleteCommand() + LS
                 + getUsageInfoForClearCommand() + LS
                 + getUsageInfoForExitCommand() + LS
-                + getUsageInfoForHelpCommand();
+                + getUsageInfoForHelpCommand() + LS
+                + getUsageInfoForSortCommand();
     }
 
     /** Returns the string for showing 'add' command usage instruction */
@@ -1139,7 +1186,12 @@ public class AddressBook {
         return String.format(MESSAGE_COMMAND_HELP, COMMAND_EXIT_WORD, COMMAND_EXIT_DESC)
                 + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_EXIT_EXAMPLE);
     }
-
+    
+    /** Returns the string for showing 'sort' command usage instruction */
+    private static String getUsageInfoForSortCommand() {
+        return String.format(MESSAGE_COMMAND_HELP, COMMAND_SORT_WORD, COMMAND_SORT_DESC)
+                + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_SORT_EXAMPLE);
+    }
 
     /*
      * ============================
