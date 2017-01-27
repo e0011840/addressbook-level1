@@ -394,9 +394,21 @@ public class AddressBook {
      * @return  size 2 array; first element is the command type and second element is the arguments string
      */
     private static String[] splitCommandWordAndArgs(String rawUserInput) {
-        final String[] split =  rawUserInput.trim().split("\\s+", 2);
-        return split.length == 2 ? split : new String[] { split[0] , "" }; // else case: no parameters
+        final String[] splitCommandWordandArgs =  trimRawUserInput(rawUserInput);
+        if(splitCommandWordandArgs.length == 2) {
+        	return splitCommandWordandArgs;
+        } else {
+        	return formEmptyArgsArray(splitCommandWordandArgs); // else case: no parameters
+        }
     }
+
+	private static String[] formEmptyArgsArray(final String[] splitCommandWordandArgs) {
+		return new String[] { splitCommandWordandArgs[0] , "" };
+	}
+
+	private static String[] trimRawUserInput(String rawUserInput) {
+		return rawUserInput.trim().split("\\s+", 2);
+	}
 
     /**
      * Constructs a generic feedback message for an invalid command from user, with instructions for correct usage.
